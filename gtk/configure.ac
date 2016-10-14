@@ -1,4 +1,6 @@
-AC_INIT([snes9x-gtk], 1.53)
+AC_INIT([snes9x-gtk], 1.54.1)
+
+AC_CONFIG_MACRO_DIR([macros])
 
 if test -z "$CFLAGS"; then
     CFLAGS="-Os -pipe"
@@ -15,6 +17,8 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
 AC_LANG_CPLUSPLUS
+
+AX_CXX_COMPILE_STDCXX([11], [noext], [optional])
 
 AC_PROG_INSTALL
 AM_INIT_AUTOMAKE([foreign subdir-objects])
