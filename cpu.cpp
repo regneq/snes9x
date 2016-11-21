@@ -25,6 +25,10 @@
   (c) Copyright 2009 - 2016  BearOso,
                              OV2
 
+  (c) Copyright 2011 - 2016  Hans-Kristian Arntzen,
+                             Daniel De Matteis
+                             (Under no circumstances will commercial rights be given)
+
 
   BS-X C emulator code
   (c) Copyright 2005 - 2006  Dreamer Nom,
@@ -147,6 +151,11 @@
   Mac OS GUI code
   (c) Copyright 1998 - 2001  John Stiles
   (c) Copyright 2001 - 2011  zones
+
+  Libretro port
+  (c) Copyright 2011 - 2016  Hans-Kristian Arntzen,
+                             Daniel De Matteis
+                             (Under no circumstances will commercial rights be given)
 
 
   Specific ports contains the works of other authors. See headers in
@@ -303,6 +312,8 @@ void S9xReset (void)
 		S9xResetOBC1();
 	if (Settings.SRTC)
 		S9xResetSRTC();
+	if (Settings.MSU1)
+		S9xMSU1Init();
 
 	S9xInitCheatData();
 }
@@ -337,6 +348,8 @@ void S9xSoftReset (void)
 		S9xResetOBC1();
 	if (Settings.SRTC)
 		S9xResetSRTC();
+	if (Settings.MSU1)
+		S9xMSU1Init();
 
 	S9xInitCheatData();
 }

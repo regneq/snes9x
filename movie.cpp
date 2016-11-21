@@ -25,6 +25,10 @@
   (c) Copyright 2009 - 2016  BearOso,
                              OV2
 
+  (c) Copyright 2011 - 2016  Hans-Kristian Arntzen,
+                             Daniel De Matteis
+                             (Under no circumstances will commercial rights be given)
+
 
   BS-X C emulator code
   (c) Copyright 2005 - 2006  Dreamer Nom,
@@ -147,6 +151,11 @@
   Mac OS GUI code
   (c) Copyright 1998 - 2001  John Stiles
   (c) Copyright 2001 - 2011  zones
+
+  Libretro port
+  (c) Copyright 2011 - 2016  Hans-Kristian Arntzen,
+                             Daniel De Matteis
+                             (Under no circumstances will commercial rights be given)
 
 
   Specific ports contains the works of other authors. See headers in
@@ -798,7 +807,9 @@ int S9xMovieOpen (const char *filename, bool8 read_only)
 	restore_movie_settings();
 
 	lseek(fn, Movie.SaveStateOffset, SEEK_SET);
-	stream = REOPEN_STREAM(fn, "rb");
+
+    // reopen stream to access as gzipped data
+    stream = REOPEN_STREAM(fn, "rb");
 	if (!stream)
 		return (FILE_NOT_FOUND);
 
@@ -811,7 +822,11 @@ int S9xMovieOpen (const char *filename, bool8 read_only)
 	else
 		result = S9xUnfreezeFromStream(stream);
 
-	CLOSE_STREAM(stream);
+    // do not close stream but close FILE *
+    // (msvcrt will try to close all open FILE *handles on exit - if we do CLOSE_STREAM here
+    //  the underlying file will be closed by zlib, causing problems when msvcrt tries to do it)
+    delete stream;
+    fclose(fd);
 
 	if (result != SUCCESS)
 		return (result);

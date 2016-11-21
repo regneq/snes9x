@@ -25,6 +25,10 @@
   (c) Copyright 2009 - 2016  BearOso,
                              OV2
 
+  (c) Copyright 2011 - 2016  Hans-Kristian Arntzen,
+                             Daniel De Matteis
+                             (Under no circumstances will commercial rights be given)
+
 
   BS-X C emulator code
   (c) Copyright 2005 - 2006  Dreamer Nom,
@@ -147,6 +151,11 @@
   Mac OS GUI code
   (c) Copyright 1998 - 2001  John Stiles
   (c) Copyright 2001 - 2011  zones
+
+  Libretro port
+  (c) Copyright 2011 - 2016  Hans-Kristian Arntzen,
+                             Daniel De Matteis
+                             (Under no circumstances will commercial rights be given)
 
 
   Specific ports contains the works of other authors. See headers in
@@ -2703,7 +2712,7 @@ LRESULT CALLBACK WinProc(
 		break;
 #endif
     case WM_DEVICECHANGE:
-        if(wParam == DBT_DEVICEARRIVAL || wParam == DBT_DEVICEREMOVECOMPLETE || wParam == DBT_DEVNODES_CHANGED)
+        if(wParam == DBT_DEVICEARRIVAL || wParam == DBT_DEVICEREMOVECOMPLETE)
             PostMessage(hWnd, WM_SCANJOYPADS, 0, 0);
         break;
     case WM_SCANJOYPADS:
@@ -3402,6 +3411,12 @@ int WINAPI WinMain(
 	{
 		SetMenu (GUI.hWnd, NULL);
 	}
+
+    DEV_BROADCAST_DEVICEINTERFACE notificationFilter;
+    ZeroMemory(&notificationFilter, sizeof(notificationFilter));
+    notificationFilter.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
+    notificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
+    RegisterDeviceNotification(GUI.hWnd, &notificationFilter, DEVICE_NOTIFY_ALL_INTERFACE_CLASSES);
 
 	InitRenderFilters();
 
